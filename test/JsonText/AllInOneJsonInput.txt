@@ -1,0 +1,139 @@
+{
+	BooleanCase: {
+		BoolNull: null,
+		BoolTrue: true,
+		BoolFalse: false,
+		NullableBoolNull: Null,
+		NullableBoolBoolTrue: True,
+		NullableBoolBoolFalse: False,
+		BooleanNull: NULL,
+		BooleanTrue: TRUE,
+		BooleanFalse: FALSE,
+		NullableBooleanNull: NULL,
+		NullableBooleanTrue: T,
+		NullableBooleanFalse: F
+	},
+	StringCase: {
+		'StringNull': null,
+		"StringEmpty": "",
+		StringCommon: "I'm a common string.",
+		SysStringNull: Null,
+		SysStringEmpty: '',
+		SysStringCommon: 'An instance of System.String.',
+
+		"StringSpace": " \t\r\n\b\f",
+		'StringEscape': "\u000d\u000A\\\'\"",
+		StringSingleQuote: "'",
+		StringDoubleQuote: '"',
+	},
+	SbyteCase: {
+		SbyteMinValue: -128,
+		SbyteMaxValue: 127,
+		SbyteFromDecimal: 1.1,
+		SbyteNull: null
+	},
+	Int64Case: {
+		Int64MinValue: -9007199254740991,
+		Int64MaxValue: 9007199254740991,
+		Int64FromDecimal: 10.11111,
+	},
+	somethingnotexists: { // Something ignored, because no corresponding property
+		"1343": "rewed"
+	},
+	UInt64Case: {
+		UInt64MinValue: 0.0000000,
+		UInt64MaxValue: 9007199254740991,
+		UInt64Null: null,
+		UInt64FromDecimal: 1.11111,
+	},
+	/*
+	 * You can't see me.
+	 */
+	DoubleCase: {
+		DoubleNull: null,
+		DoubleMinValue: -1.7976931348623157E+308,
+		DoubleMaxValue: +1.7976931348623157e308,
+		DoubleFromBinary: 0b1100,
+		DoubleFromOct1: -  0O76543210,
+		DoubleFromOct2: +070,
+		DoubleFromHex: +  0x0190AbcDeF,
+		DoubleFromInt: 0001234567890,
+		DoublePoint: .0000000000000000000009876543210,
+		DoubleEpsilon: -4.94065645841247E-324,
+		DoubleUnderflow: -2.47032822920623E-324,
+		DoubleNotUnderflow: -2.47032822920624E-324,
+	},
+	ArrayCase: {
+		ArrayNull: null,
+		ArrayEmpty: [],
+		MultidimensionalArray: [
+			[
+				[12,32,34,1e54],
+				[23,53,23,+334e5],
+			],[
+				[53,36,47,75],
+				[0.3,.56,1234,3454]
+			],[
+				[53,64,17,36],
+				[0.3,0,.56,1234]
+			]
+		],
+		JaggedArray: [
+			["234","WPOER","\u00AA"],
+			["  ","''''","#$%^",]
+		],
+		MultidimensionalArrayEmpty0: [],
+		JaggedArrayEmpty0: [],
+		MultidimensionalArrayEmpty1: [[],[],[]],
+		JaggedArrayEmpty1: [[],[],[],[]],
+		MultidimensionalArrayEmpty2: [[[],[],[],[]],[[],[],[],[]]]
+	},
+	DictionaryCase: {
+		DictionaryNull: null,
+		DictionaryEmpty: {},
+		DictionaryCommon: {
+			"first": "1st",
+			second: "2nd",
+			"Hello": "Hello world!"
+		},
+		DictionaryInDictionary: {
+			DictionaryEmpty: {
+			},
+			DictionaryCommon0: {
+				"A": 0x41,
+				"B": 0x42,
+				" ": 0x20,
+				"\u0008": 0x08
+			},
+			DictionaryNull: null,
+			DictionaryCommon1: {
+				"a": 0x61,
+				"d": 0x64
+			}
+		}
+	},
+	"EnumerableCase": {
+		EnumerableNull: null,
+		EnumerableEmpty: [],
+		EnumerableCommon: ["1", "2", "erwerwe"],
+		EnumerableInEnumerable: [[2.3,434,34.343],[34324,.3434,0.2343,0,0x123]]
+	},
+	"CollectionCase": {
+		CollectionNull: null,
+		CollectionEmpty: [],
+		CollectionCommon: ["10", "070", "0b101"],
+		CollectionInCollection: [[2.3,"434",[45345,34534]],[34324,".3434",null,0,true]]
+	},
+	"QueueCase": {
+		QueueNull: null,
+		QueueEmpty: [],
+		QueueCommon: ["1", 2, "erwerwe", {"2213": "erdsf", erwe: 3423.5}],
+		QueueInQueue: [[2.3,434,34.343],[34324,.3434,0.2343,0,0x123]]
+	},
+	"StackCase": {
+		StackNull: null,
+		StackEmpty: [],
+		StackCommon: ["1", "2", "erwerwe", [3223, 2312, "tuer", false, null], null],
+		StackInStack: [[23,43,0x34],[34,128,255,0,0O40]]
+	},
+}
