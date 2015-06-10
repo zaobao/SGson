@@ -4,23 +4,111 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
+using SGson.Deserializers;
 using SGson.IO;
 using SGson.Interceptors;
+using SGson.Serializers;
 using SGson.TypeAdapters;
 
 namespace SGson
 {
 	public class Gson
 	{
+		internal static Dictionary<Type, Func<object, JsonElement>> DefaultSerializerDictionary = new Dictionary<Type, Func<object, JsonElement>>()
+		{
+			{typeof(bool), DefaultSerializer.SerializeBoolean},
+			{typeof(sbyte), DefaultSerializer.SerializeSbyte},
+			{typeof(byte), DefaultSerializer.SerializeByte},
+			{typeof(int), DefaultSerializer.SerializeInt32},
+			{typeof(uint), DefaultSerializer.SerializeUInt32},
+			{typeof(long), DefaultSerializer.SerializeInt64},
+			{typeof(ulong), DefaultSerializer.SerializeUInt64},
+			{typeof(float), DefaultSerializer.SerializeFloat},
+			{typeof(double), DefaultSerializer.SerializeDouble},
+			{typeof(decimal), DefaultSerializer.SerializeDecimal},
+			{typeof(string), DefaultSerializer.SerializeString},
+			{typeof(DateTime), DefaultSerializer.SerializeDateTime}
+		};
+		internal static Dictionary<Type, Func<JsonElement, object>> DefaultDeserializerDictionary = new Dictionary<Type, Func<JsonElement, object>>()
+		{
+			{typeof(bool), DefaultDeserializer.DeserializeBoolean},
+			{typeof(sbyte), DefaultDeserializer.DeserializeSbyte},
+			{typeof(byte), DefaultDeserializer.DeserializeByte},
+			{typeof(int), DefaultDeserializer.DeserializeInt32},
+			{typeof(uint), DefaultDeserializer.DeserializeUInt32},
+			{typeof(long), DefaultDeserializer.DeserializeInt64},
+			{typeof(ulong), DefaultDeserializer.DeserializeUInt64},
+			{typeof(float), DefaultDeserializer.DeserializeFloat},
+			{typeof(double), DefaultDeserializer.DeserializeDouble},
+			{typeof(decimal), DefaultDeserializer.DeserializeDecimal},
+			{typeof(string), DefaultDeserializer.DeserializeString},
+			{typeof(DateTime), DefaultDeserializer.DeserializeDateTime}
+		};
+		internal static Dictionary<Type, ATypeAdapter> DefaultTypeAdapterDictionary = new Dictionary<Type, ATypeAdapter>()
+		{
+			{typeof(object), new ObjectAdapter()}
+		};
+		internal static List<ABreakInterceptor> DefaultBreakInterceptorList = new List<ABreakInterceptor>()
+		{
+			new EnumerableInterceptor(),
+			new CollectionInterceptor(),
+			new DictionaryInterceptor(),
+			new StackInterceptor(),
+			new QueueInterceptor(),
+			new ArrayInterceptor(),
+			new NullableInterceptor()
+		};
+		internal static int DefaultVisitedObjectStackLength = 8;
+		internal static int DefaultVisitedObjectCountLimit = 100000;
+
 		internal Dictionary<Type, Func<object, JsonElement>> SerializerDictionary = new Dictionary<Type, Func<object, JsonElement>>();
 		internal Dictionary<Type, Func<JsonElement, object>> DeserializerDictionary = new Dictionary<Type, Func<JsonElement, object>>();
 		internal Dictionary<Type, ATypeAdapter> TypeAdapterDictionary = new Dictionary<Type, ATypeAdapter>();
 		internal List<ABreakInterceptor> BreakInterceptorList = new List<ABreakInterceptor>();
-		internal int VisitedObjectStackLength = 8;
-		internal int VisitedObjectCountLimit = 100000;
+		internal int VisitedObjectStackLength;
+		internal int VisitedObjectCountLimit;
 
 		private Stack<object> visitedObjectStack = new Stack<object>();
 		private int allVisitedOjectCount = 0;
+
+		public Gson()
+			: this(DefaultSerializerDictionary,
+				DefaultDeserializerDictionary,
+				DefaultTypeAdapterDictionary,
+				DefaultBreakInterceptorList,
+				DefaultVisitedObjectStackLength,
+				DefaultVisitedObjectCountLimit) {}
+
+		public Gson(Dictionary<Type, Func<object, JsonElement>> serializerDictionary,
+			Dictionary<Type, Func<JsonElement, object>> deserializerDictionary,
+			Dictionary<Type, ATypeAdapter> typeAdapterDictionary,
+			List<ABreakInterceptor> breakInterceptorList,
+			int visitedObjectStackLength,
+			int visitedObjectCountLimit)
+		{
+			this.VisitedObjectStackLength = visitedObjectStackLength;
+			this.VisitedObjectCountLimit = visitedObjectCountLimit;
+			foreach (KeyValuePair<Type, Func<object, JsonElement>> keyValuePair in serializerDictionary)
+			{
+				this.SerializerDictionary.Add(keyValuePair.Key, keyValuePair.Value);
+			}
+			foreach (KeyValuePair<Type, Func<JsonElement, object>> keyValuePair in deserializerDictionary)
+			{
+				this.DeserializerDictionary.Add(keyValuePair.Key, keyValuePair.Value);
+			}
+			foreach (KeyValuePair<Type, ATypeAdapter> keyValuePair in typeAdapterDictionary)
+			{
+				ATypeAdapter adapter = keyValuePair.Value.Clone();
+				adapter.Context = this;
+				this.TypeAdapterDictionary.Add(keyValuePair.Key, adapter);
+			}
+			for (int i =  0; i < breakInterceptorList.Count; i++)
+			{
+				ABreakInterceptor interceptor = breakInterceptorList[i].Clone();
+				interceptor.Context = this;
+				this.BreakInterceptorList.Add(interceptor);
+			}
+		}
 
 		public string ToJson(object obj)
 		{

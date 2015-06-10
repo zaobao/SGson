@@ -15,7 +15,7 @@ namespace SGson.Test
 	{
 		private static void TestNullJson()
 		{
-			Gson gson = new GsonBuilder().SetVisitedObjectStackLength(1).Create();
+			Gson gson = new Gson();
 			string str = null;
 			Console.Write("Check Null ");
 			for (int i = 0; i < Math.Max(Console.WindowWidth - 20, 4); i++)
@@ -42,7 +42,7 @@ namespace SGson.Test
 
 		private static void TestEmptyJson()
 		{
-			Gson gson = new GsonBuilder().Create();
+			Gson gson = new Gson();
 			string str = "";
 			Console.Write("Check EmptyJson ");
 			for (int i = 0; i < Math.Max(Console.WindowWidth - 25, 4); i++)
