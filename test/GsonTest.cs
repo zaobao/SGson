@@ -11,7 +11,7 @@ using SGson.Test.Entity;
 
 namespace SGson.Test
 {
-	public class GsonTest()
+	public class GsonTest
 	{
 		private static void TestNullJson()
 		{
@@ -36,7 +36,7 @@ namespace SGson.Test
 				Console.ForegroundColor = ConsoleColor.Red;
 				Console.Write("Failed");
 				Console.ForegroundColor = ConsoleColor.Black;
-				Console.Write("]\n");
+                Console.WriteLine("]");
 			}
 		}
 
@@ -63,7 +63,7 @@ namespace SGson.Test
 				Console.ForegroundColor = ConsoleColor.Red;
 				Console.Write("Failed");
 				Console.ForegroundColor = ConsoleColor.Black;
-				Console.Write("]\n");
+				Console.WriteLine("]");
 			}
 		}
 
@@ -96,7 +96,7 @@ namespace SGson.Test
 				Console.ForegroundColor = ConsoleColor.Red;
 				Console.Write("Failed");
 				Console.ForegroundColor = ConsoleColor.Black;
-				Console.Write("]\n");
+				Console.WriteLine("]");
 			}
 		}
 

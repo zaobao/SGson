@@ -2,7 +2,7 @@ using System;
 
 namespace SGson.Deserializers
 {
-	public class DefaultDeserializer()
+	public class DefaultDeserializer
 	{
 		public static object DeserializeBoolean(JsonElement x)
 		{
