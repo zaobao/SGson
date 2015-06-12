@@ -36,7 +36,7 @@ namespace SGson.Test
 				Console.ForegroundColor = ConsoleColor.Red;
 				Console.Write("Failed");
 				Console.ForegroundColor = ConsoleColor.Black;
-                Console.WriteLine("]");
+				Console.WriteLine("]");
 			}
 		}
 
