@@ -1,19 +1,20 @@
+using System;
+
 using SGson;
-using System.Diagnostics;
 
 namespace SGson.Example
 {
-	public class EMCAScriptNumber
+	public class EMCAScript6Number
 	{
 		public static void Main()
 		{
 			Gson gson = new Gson();
 
 			// EMCAScript6 binary
-			Debug.WriteLine(gson.FromJson<int>("0b1010"));
+			Console.WriteLine(gson.FromJson<int>("0b1010"));
 
 			// EMCAScript6 Octet
-			Debug.WriteLine(gson.FromJson<int>("0O1010"));
+			Console.WriteLine(gson.FromJson<int>("0O1010"));
 		}
 	}
 }
