@@ -5,22 +5,21 @@ Simple Gson for C#
 
 SGson是一个C#的JSON库，用于JSON格式的序列化和反序列化。
 
-作者认为Google Gson的使用体验比较好，将仿照它的功能写一个C#下的JSON库，提供一些基础的好用的功能，但API会依照C#的一些特性有所调整。
+仿照Google Gson写一个C#下的JSON库，但API会依照C#的一些特性有所调整。
 
+## 功能概述
 
-## SGson目标
-
-* 提供System.Collections.Generic下所以类包括接口的默认序列化/反序列化功能
-* 在JSON标准格式下，允许自定义序列化/反序列化格式
-* 反序列化时，兼容非标准格式JSON输入，尽可能兼容EMCAScript语法
+* 常用类包括接口的默认序列化/反序列化功能
+* 自定义序列化/反序列化格式
+* 兼容非标准格式JSON输入，兼容EMCAScript6的数字格式
 * 序列化输出标准格式JSON
-* 提供友好的语法错误定位功能
+* 语法错误定位
 
 ## 使用SGson
 
 ### 基础类型
 
-SGson将C#中字符串和所有数字类型序列化为JSON的string和number，但不包括char类型，留给用户可以自己决定将它序列化为字符串还是数字。
+SGson将C#中字符串和所有数字类型序列化为JSON的string和number，但不包括char类型，char类型留给用户可以自己决定将它序列化为字符串还是数字。
 
 #### 数字类型扩展
 
