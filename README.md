@@ -38,10 +38,10 @@ SGson在序列化和反序列化对象时，只会使用public的属性，并且
 
 如果对象的类型声明为object，将会使用以下策略反序列化。
 
-* 如果在JSON中是数字，会被反序列化为double类型
-* 如果在JSON中是字符串，会被反序列化为string类型
-* 如果在JSON中是数组，会被反序列化为List<object>类型，这里的泛型obhect类型也使用此规则反序列化
-* 如果在JSON中是对象，被反序列化为Dictionary<string, object>类型，这里的泛型obhect类型也使用此规则反序列化
+  * 如果在JSON中是数字，会被反序列化为double类型
+  * 如果在JSON中是字符串，会被反序列化为string类型
+  * 如果在JSON中是数组，会被反序列化为List<object>类型，这里的泛型obhect类型也使用此规则反序列化
+  * 如果在JSON中是对象，被反序列化为Dictionary<string, object>类型，这里的泛型obhect类型也使用此规则反序列化
 
 ### IDictionary<,>
 
@@ -75,6 +75,57 @@ SGson自定义序列化和反序列化的方式有三种：注册委托、注册
 #### 注册委托
 
 #### 注册适配器
+和Google Gson相似的功能。在适配器中定义好序列化和反序列化的方法，注册到GsonBuilder中。注意考虑Null值的情况。
+
+下面是通过自定义适配器，使SGson兼容IP地址类型的示例
+
+定义适配器：
+```csharp
+		class IPAddressAdaper : ATypeAdapter
+		{
+			public override JsonElement Serialize(object o)
+			{
+				if (o == null)
+				{
+					return JsonNull.Instance;
+				}
+				return new JsonString(((IPAddress)o).ToString());
+			}
+
+			public override object Deserialize(JsonElement je, Type originalType)
+			{
+				if (je == JsonNull.Instance)
+				{
+					return null;
+				}
+				if (je.IsJsonString)
+				{
+					try
+					{
+						return IPAddress.Parse((string)(JsonString)je);
+					}
+					catch (Exception)
+					{
+						;
+					}
+				}
+				throw new Exception(String.Format("Can not parse {0} to an IPAdress.", je.ToString()));
+			}
+		}
+```
+使用适配器
+```csharp
+			Gson gson = new GsonBuilder()
+				.RegisterAdapter(new IPAddressAdaper(), typeof(IPAddress))
+				.Create();
+
+			IPAddress ipa = gson.FromJson<IPAddress>("\"192.168.0.1\"");
+			Console.WriteLine(ipa);
+			Console.WriteLine(gson.ToJson(ipa));
+```
+输出结果为：
+192.168.0.1
+"192.168.0.1"
 
 #### 注册拦截器
 
