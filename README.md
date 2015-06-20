@@ -1,4 +1,5 @@
 # SGson 用户手册
+
 Simple Gson for C#
 
 ## 概览
@@ -36,12 +37,11 @@ SGson在序列化和反序列化对象时，只会使用public的属性，并且
 
 #### 对object的反序列化策略
 
-如果对象的类型声明为object，将会使用以下策略反序列化。
-
-  * 如果在JSON中是数字，会被反序列化为double类型
-  * 如果在JSON中是字符串，会被反序列化为string类型
-  * 如果在JSON中是数组，会被反序列化为List<object>类型，这里的泛型obhect类型也使用此规则反序列化
-  * 如果在JSON中是对象，被反序列化为Dictionary<string, object>类型，这里的泛型obhect类型也使用此规则反序列化
+如果对象的类型声明为object，将会使用以下策略反序列化：  
+如果在JSON中是数字，会被反序列化为double类型；  
+如果在JSON中是字符串，会被反序列化为string类型；  
+如果在JSON中是数组，会被反序列化为List<object>类型，这里的泛型obhect类型也使用此规则反序列化；  
+如果在JSON中是对象，被反序列化为Dictionary<string, object>类型，这里的泛型obhect类型也使用此规则反序列化。
 
 ### IDictionary<,>
 
