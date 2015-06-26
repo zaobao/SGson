@@ -107,47 +107,47 @@ Console.WriteLine(gson.ToJson(DateTime.Now));
 
 定义适配器：
 ```csharp
-		class IPAddressAdaper : ATypeAdapter
+class IPAddressAdaper : ATypeAdapter
+{
+	public override JsonElement Serialize(object o)
+	{
+		if (o == null)
 		{
-			public override JsonElement Serialize(object o)
-			{
-				if (o == null)
-				{
-					return JsonNull.Instance;
-				}
-				return new JsonString(((IPAddress)o).ToString());
-			}
+			return JsonNull.Instance;
+		}
+		return new JsonString(((IPAddress)o).ToString());
+	}
 
-			public override object Deserialize(JsonElement je, Type originalType)
+	public override object Deserialize(JsonElement je, Type originalType)
+	{
+		if (je == JsonNull.Instance)
+		{
+			return null;
+		}
+		if (je.IsJsonString)
+		{
+			try
 			{
-				if (je == JsonNull.Instance)
-				{
-					return null;
-				}
-				if (je.IsJsonString)
-				{
-					try
-					{
-						return IPAddress.Parse((string)(JsonString)je);
-					}
-					catch (Exception)
-					{
-						;
-					}
-				}
-				throw new Exception(String.Format("Can not parse {0} to an IPAdress.", je.ToString()));
+				return IPAddress.Parse((string)(JsonString)je);
+			}
+			catch (Exception)
+			{
+				;
 			}
 		}
+		throw new Exception(String.Format("Can not parse {0} to an IPAdress.", je.ToString()));
+	}
+}
 ```
 使用适配器
 ```csharp
-			Gson gson = new GsonBuilder()
-				.RegisterAdapter(new IPAddressAdaper(), typeof(IPAddress))
-				.Create();
+Gson gson = new GsonBuilder()
+	.RegisterAdapter(new IPAddressAdaper(), typeof(IPAddress))
+	.Create();
 
-			IPAddress ipa = gson.FromJson<IPAddress>("\"192.168.0.1\"");
-			Console.WriteLine(ipa);
-			Console.WriteLine(gson.ToJson(ipa));
+IPAddress ipa = gson.FromJson<IPAddress>("\"192.168.0.1\"");
+Console.WriteLine(ipa);
+Console.WriteLine(gson.ToJson(ipa));
 ```
 输出结果为：
 192.168.0.1
