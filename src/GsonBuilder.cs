@@ -117,7 +117,6 @@ namespace SGson
 
 		public Gson Create()
 		{
-			Gson gson = new Gson();
 			return new Gson(serializerDictionary,
 				deserializerDictionary,
 				typeAdapterDictionary,

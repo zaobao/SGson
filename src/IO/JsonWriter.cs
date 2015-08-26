@@ -177,10 +177,6 @@ namespace SGson.IO
 			int count = 0;
 			foreach (KeyValuePair<string,JsonElement> kv in jsonMap)
 			{
-				if (kv.Key == "Name")
-				{
-					Console.WriteLine("Name: " + kv.Value);
-				}
 				if (count != 0)
 				{
 					writer.Write(",");
