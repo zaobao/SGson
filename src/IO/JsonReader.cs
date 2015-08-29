@@ -27,12 +27,6 @@ namespace SGson.IO
 
 		private char[] shortBuffer = new char[4];
 
-		private StringPool stringPool = new StringPool();
-		private char[] stringBuffer = new char[1024];
-		private const int stringBufferLength = 1024;
-		private int stringBufferPos = 0; 
-		private const int maxLengthToPool = 32;
-
 
 		public JsonReader(TextReader reader)
 		{
@@ -395,12 +389,13 @@ namespace SGson.IO
 				}
 				throw CreateJsonParseException(String.Format("Unexpected char {0} at the beginning of a string.", (char)c));
 			}
-			for (stringBufferPos = 0; stringBufferPos < maxLengthToPool; stringBufferPos++)
+			List<char> chars = new List<char>();
+			while (true)
 			{
 				c = Read();
 				if (c == quote)
 				{
-					return stringPool.Intern(stringBuffer, stringBufferPos);
+					break;
 				}
 				else if (c == -1)
 				{
@@ -408,43 +403,14 @@ namespace SGson.IO
 				}
 				else if (c == '\\')
 				{
-					stringBuffer[stringBufferPos] = ReadEscapeChar();
+					chars.Add(ReadEscapeChar());
 				}
 				else
 				{
-					stringBuffer[stringBufferPos] = (char)c;
+					chars.Add((char)c);
 				}
 			}
-			StringBuilder sb = new StringBuilder().Append(stringBuffer, 0, stringBufferPos);
-			while (true)
-			{
-				for (stringBufferPos = 0; stringBufferPos < stringBuffer.Length; stringBufferPos++)
-				{
-					c = Read();
-					if (c == quote)
-					{
-						break;
-					}
-					else if (c == -1)
-					{
-						throw CreateJsonParseException("Unterminated string.");
-					}
-					else if (c == '\\')
-					{
-						stringBuffer[stringBufferPos] = ReadEscapeChar();
-					}
-					else
-					{
-						stringBuffer[stringBufferPos] = (char)c;
-					}
-				}
-				sb.Append(stringBuffer, 0, stringBufferPos);
-				if (stringBufferPos < stringBuffer.Length)
-				{
-					break;
-				}
-			}
-			return new JsonString(sb.ToString());
+			return new JsonString(new String(chars.ToArray()));
 		}
 
 		private char ReadEscapeChar()
@@ -636,43 +602,26 @@ namespace SGson.IO
 			{
 				throw CreateJsonParseException(String.Format("Unexpected char '{0}' as the first character of the variable name.", (char)c));
 			}
-			stringBuffer[0] = (char)c;
-			for (stringBufferPos = 1; stringBufferPos < maxLengthToPool; stringBufferPos++)
-			{
-				c = PeekSkipWhite();
-				if (c == -1 || varNameCharMap[c] == VarNameCharType.Invalid)
-				{
-					return stringPool.Intern(stringBuffer, stringBufferPos);
-				}
-				else
-				{
-					stringBuffer[stringBufferPos] = (char)c;
-				}
-				Read();
-			}
-			StringBuilder sb = new StringBuilder().Append(stringBuffer, 0, stringBufferPos);
+			List<char> chars = new List<char>();
+			chars.Add((char)c);
 			while (true)
 			{
-				for (stringBufferPos = 0; stringBufferPos < stringBuffer.Length; stringBufferPos++)
-				{
-					c = PeekSkipWhite();
-					if (c == -1 || varNameCharMap[c] == VarNameCharType.Invalid)
-					{
-						break;
-					}
-					else
-					{
-						stringBuffer[stringBufferPos] = (char)c;
-					}
-					Read();
-				}
-				sb.Append(stringBuffer, 0, stringBufferPos);
-				if (stringBufferPos < stringBuffer.Length)
+				c = PeekSkipWhite();
+				if (c == -1)
 				{
 					break;
 				}
+				if (varNameCharMap[c] == VarNameCharType.Invalid)
+				{
+					break;
+				}
+				else
+				{
+					chars.Add((char)c);
+					Read();
+				}
 			}
-			return sb.ToString();
+			return new String(chars.ToArray()); 
 		}
 
 		private int ReadSkipWhite()
