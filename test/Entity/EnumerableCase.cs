@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 
-using SGson;
-
 namespace SGson.Test.Entity
 {
 	public class EnumerableCase

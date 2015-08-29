@@ -12,7 +12,7 @@ namespace SGson
 		private Dictionary<Type, Func<object, JsonElement>> serializerDictionary = new Dictionary<Type, Func<object, JsonElement>>();
 		private Dictionary<Type, Func<JsonElement, object>> deserializerDictionary = new Dictionary<Type, Func<JsonElement, object>>();
 		private Dictionary<Type, ATypeAdapter> typeAdapterDictionary = new Dictionary<Type, ATypeAdapter>();
-		private List<ABreakInterceptor> breakInterceptorList = new List<ABreakInterceptor>();
+		private List<AInterceptor> InterceptorList = new List<AInterceptor>();
 		private int visitedObjectStackLength;
 		private long visitedObjectCountLimit;
 
@@ -20,14 +20,14 @@ namespace SGson
 			: this(Gson.DefaultSerializerDictionary,
 				Gson.DefaultDeserializerDictionary,
 				Gson.DefaultTypeAdapterDictionary,
-				Gson.DefaultBreakInterceptorList,
+				Gson.DefaultInterceptorList,
 				Gson.DefaultVisitedObjectStackLength,
 				Gson.DefaultVisitedObjectCountLimit) {}
 
 		public GsonBuilder(Dictionary<Type, Func<object, JsonElement>> serializerDictionary,
 			Dictionary<Type, Func<JsonElement, object>> deserializerDictionary,
 			Dictionary<Type, ATypeAdapter> typeAdapterDictionary,
-			List<ABreakInterceptor> breakInterceptorList,
+			List<AInterceptor> InterceptorList,
 			int visitedObjectStackLength,
 			long visitedObjectCountLimit)
 		{
@@ -46,10 +46,10 @@ namespace SGson
 				ATypeAdapter adapter = keyValuePair.Value.Clone();
 				this.typeAdapterDictionary.Add(keyValuePair.Key, adapter);
 			}
-			for (int i =  0; i < breakInterceptorList.Count; i++)
+			for (int i =  0; i < InterceptorList.Count; i++)
 			{
-				ABreakInterceptor interceptor = breakInterceptorList[i].Clone();
-				this.breakInterceptorList.Add(interceptor);
+				AInterceptor interceptor = InterceptorList[i].Clone();
+				this.InterceptorList.Add(interceptor);
 			}
 		}
 
@@ -94,11 +94,11 @@ namespace SGson
 			return this;
 		}
 
-		public GsonBuilder RegisterBreakInterceptor(ABreakInterceptor interceptor)
+		public GsonBuilder RegisterInterceptor(AInterceptor interceptor)
 		{
 			if (interceptor != null)
 			{
-				breakInterceptorList.Add(interceptor);
+				InterceptorList.Add(interceptor);
 			}
 			return this;
 		}
@@ -120,7 +120,7 @@ namespace SGson
 			return new Gson(serializerDictionary,
 				deserializerDictionary,
 				typeAdapterDictionary,
-				breakInterceptorList,
+				InterceptorList,
 				visitedObjectStackLength,
 				visitedObjectCountLimit);
 		}

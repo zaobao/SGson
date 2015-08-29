@@ -46,9 +46,10 @@ namespace SGson
 		};
 		internal static Dictionary<Type, ATypeAdapter> DefaultTypeAdapterDictionary = new Dictionary<Type, ATypeAdapter>()
 		{
+			{typeof(Enum), new EnumAdapter()},
 			{typeof(object), new ObjectAdapter()}
 		};
-		internal static List<ABreakInterceptor> DefaultBreakInterceptorList = new List<ABreakInterceptor>()
+		internal static List<AInterceptor> DefaultInterceptorList = new List<AInterceptor>()
 		{
 			new EnumerableInterceptor(),
 			new CollectionInterceptor(),
@@ -64,7 +65,7 @@ namespace SGson
 		internal Dictionary<Type, Func<object, JsonElement>> SerializerDictionary = new Dictionary<Type, Func<object, JsonElement>>();
 		internal Dictionary<Type, Func<JsonElement, object>> DeserializerDictionary = new Dictionary<Type, Func<JsonElement, object>>();
 		internal Dictionary<Type, ATypeAdapter> TypeAdapterDictionary = new Dictionary<Type, ATypeAdapter>();
-		internal List<ABreakInterceptor> BreakInterceptorList = new List<ABreakInterceptor>();
+		internal List<AInterceptor> InterceptorList = new List<AInterceptor>();
 		internal int VisitedObjectStackLength;
 		internal long VisitedObjectCountLimit;
 
@@ -75,14 +76,14 @@ namespace SGson
 			: this(DefaultSerializerDictionary,
 				DefaultDeserializerDictionary,
 				DefaultTypeAdapterDictionary,
-				DefaultBreakInterceptorList,
+				DefaultInterceptorList,
 				DefaultVisitedObjectStackLength,
 				DefaultVisitedObjectCountLimit) {}
 
 		public Gson(Dictionary<Type, Func<object, JsonElement>> serializerDictionary,
 			Dictionary<Type, Func<JsonElement, object>> deserializerDictionary,
 			Dictionary<Type, ATypeAdapter> typeAdapterDictionary,
-			List<ABreakInterceptor> breakInterceptorList,
+			List<AInterceptor> InterceptorList,
 			int visitedObjectStackLength,
 			long visitedObjectCountLimit)
 		{
@@ -102,11 +103,11 @@ namespace SGson
 				adapter.Context = this;
 				this.TypeAdapterDictionary.Add(keyValuePair.Key, adapter);
 			}
-			for (int i =  0; i < breakInterceptorList.Count; i++)
+			for (int i =  0; i < InterceptorList.Count; i++)
 			{
-				ABreakInterceptor interceptor = breakInterceptorList[i].Clone();
+				AInterceptor interceptor = InterceptorList[i].Clone();
 				interceptor.Context = this;
-				this.BreakInterceptorList.Add(interceptor);
+				this.InterceptorList.Add(interceptor);
 			}
 		}
 
@@ -153,11 +154,11 @@ namespace SGson
 					{
 						return (JsonElement)obj;
 					}
-					for (int i = BreakInterceptorList.Count - 1; i >= 0; i--)
+					for (int i = InterceptorList.Count - 1; i >= 0; i--)
 					{
-						if (BreakInterceptorList[i].IsSerializable(obj))
+						if (InterceptorList[i].IsSerializable(obj))
 						{
-							return BreakInterceptorList[i].InterceptWhenSerialize(obj);
+							return InterceptorList[i].InterceptWhenSerialize(obj);
 						}
 					}
 					Type type = obj.GetType();
@@ -186,11 +187,11 @@ namespace SGson
 
 		protected internal object FromJsonTree(JsonElement je, Type type)
 		{
-			for (int i = BreakInterceptorList.Count - 1; i >= 0; i--)
+			for (int i = InterceptorList.Count - 1; i >= 0; i--)
 			{
-				if (BreakInterceptorList[i].IsDeserializable(type))
+				if (InterceptorList[i].IsDeserializable(type))
 				{
-					return BreakInterceptorList[i].InterceptWhenDeserialize(je, type);
+					return InterceptorList[i].InterceptWhenDeserialize(je, type);
 				}
 			}
 			Func<JsonElement, object> func;

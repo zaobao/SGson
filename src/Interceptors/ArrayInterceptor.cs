@@ -8,7 +8,7 @@ using SGson.Reflection;
 
 namespace SGson.Interceptors
 {
-	public class ArrayInterceptor : ABreakInterceptor
+	public class ArrayInterceptor : AInterceptor
 	{
 
 		// Not for one dimensional array

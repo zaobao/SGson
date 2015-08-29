@@ -64,7 +64,7 @@ namespace SGson.TypeAdapters
 				}
 				return o;
 			}
-			throw new Exception(String.Format("No specific deserializer for type {0}.Type not match, can not convert {0} to object.", originalType,je.GetType()));
+			throw new Exception(String.Format("No specific deserializer for type {0}. Type not match, can not convert {0} to object.", originalType,je.GetType()));
 		}
 	}
 }

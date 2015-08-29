@@ -2,7 +2,7 @@ using System;
 
 namespace SGson.Interceptors
 {
-	public abstract class ABreakInterceptor
+	public abstract class AInterceptor
 	{
 		protected internal Gson Context;
 
@@ -11,9 +11,9 @@ namespace SGson.Interceptors
 		public abstract JsonElement InterceptWhenSerialize(object o);
 		public abstract object InterceptWhenDeserialize(JsonElement je, Type type);
 
-		public ABreakInterceptor Clone()
+		public AInterceptor Clone()
 		{
-			return (ABreakInterceptor)this.MemberwiseClone();
+			return (AInterceptor)this.MemberwiseClone();
 		}
 	}
 }

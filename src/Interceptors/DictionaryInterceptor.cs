@@ -7,7 +7,7 @@ using SGson.Reflection;
 
 namespace SGson.Interceptors
 {
-	public class DictionaryInterceptor : ABreakInterceptor
+	public class DictionaryInterceptor : AInterceptor
 	{
 		private static readonly Type mGenericTypeDefinition = typeof(IDictionary<,>);
 		private static readonly Type mDicDefinition = typeof(Dictionary<,>);

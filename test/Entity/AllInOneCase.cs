@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 
-using SGson;
-
 namespace SGson.Test.Entity
 {
 	public class AllInOneCase
@@ -24,5 +22,6 @@ namespace SGson.Test.Entity
 		public CollectionCase CollectionCase { get; set; }
 		public StackCase StackCase { get; set; }
 		public QueueCase QueueCase { get; set; }
+		public EnumCase EnumCase { get; set; }
 	}
 }

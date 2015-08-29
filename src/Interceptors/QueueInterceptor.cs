@@ -7,7 +7,7 @@ using SGson.Reflection;
 
 namespace SGson.Interceptors
 {
-	public class QueueInterceptor : ABreakInterceptor
+	public class QueueInterceptor : AInterceptor
 	{
 		private static readonly Type mQueueType = typeof(Queue<>);
 

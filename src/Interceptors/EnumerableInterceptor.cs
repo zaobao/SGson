@@ -7,7 +7,7 @@ using SGson.Reflection;
 
 namespace SGson.Interceptors
 {
-	public class EnumerableInterceptor : ABreakInterceptor
+	public class EnumerableInterceptor : AInterceptor
 	{
 		private static readonly Type mGenericTypeDefinition = typeof(IEnumerable<>);
 		private static readonly Type mListType = typeof(List<>);

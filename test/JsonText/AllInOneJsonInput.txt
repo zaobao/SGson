@@ -142,4 +142,11 @@
 		StackCommon: ["1", "2", "erwerwe", [3223, 2312, "tuer", false, null], null],
 		StackInStack: [[23,43,0x34],[34,128,255,0,0O40]]
 	},
+	EnumCase: {
+		Monday: "Monday",
+		EnumNull: null,
+		Day6: 6,
+		Day7: 7,
+		DayString4: "4",
+	}
 }

@@ -7,7 +7,7 @@ using SGson.Reflection;
 
 namespace SGson.Interceptors
 {
-	public class StackInterceptor : ABreakInterceptor
+	public class StackInterceptor : AInterceptor
 	{
 		private static readonly Type mStackType = typeof(Stack<>);
 
