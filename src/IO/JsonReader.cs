@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 using SGson.Grammar;
@@ -25,6 +26,12 @@ namespace SGson.IO
 		private static VarNameCharMap varNameCharMap = VarNameCharMap.Instance;
 
 		private char[] shortBuffer = new char[4];
+
+		private StringPool stringPool = new StringPool();
+		private char[] stringBuffer = new char[1024];
+		private const int stringBufferLength = 1024;
+		private int stringBufferPos = 0; 
+		private const int maxLengthToPool = 32;
 
 
 		public JsonReader(TextReader reader)
@@ -388,13 +395,12 @@ namespace SGson.IO
 				}
 				throw CreateJsonParseException(String.Format("Unexpected char {0} at the beginning of a string.", (char)c));
 			}
-			List<char> chars = new List<char>();
-			while (true)
+			for (stringBufferPos = 0; stringBufferPos < maxLengthToPool; stringBufferPos++)
 			{
 				c = Read();
 				if (c == quote)
 				{
-					break;
+					return stringPool.Intern(stringBuffer, stringBufferPos);
 				}
 				else if (c == -1)
 				{
@@ -402,14 +408,43 @@ namespace SGson.IO
 				}
 				else if (c == '\\')
 				{
-					chars.Add(ReadEscapeChar());
+					stringBuffer[stringBufferPos] = ReadEscapeChar();
 				}
 				else
 				{
-					chars.Add((char)c);
+					stringBuffer[stringBufferPos] = (char)c;
 				}
 			}
-			return new JsonString(new String(chars.ToArray()));
+			StringBuilder sb = new StringBuilder().Append(stringBuffer, 0, stringBufferPos);
+			while (true)
+			{
+				for (stringBufferPos = 0; stringBufferPos < stringBuffer.Length; stringBufferPos++)
+				{
+					c = Read();
+					if (c == quote)
+					{
+						break;
+					}
+					else if (c == -1)
+					{
+						throw CreateJsonParseException("Unterminated string.");
+					}
+					else if (c == '\\')
+					{
+						stringBuffer[stringBufferPos] = ReadEscapeChar();
+					}
+					else
+					{
+						stringBuffer[stringBufferPos] = (char)c;
+					}
+				}
+				sb.Append(stringBuffer, 0, stringBufferPos);
+				if (stringBufferPos < stringBuffer.Length)
+				{
+					break;
+				}
+			}
+			return new JsonString(sb.ToString());
 		}
 
 		private char ReadEscapeChar()
@@ -420,7 +455,7 @@ namespace SGson.IO
 				case -1:
 					throw CreateJsonParseException("Unterminated escape char.");
 				case 'u':
-					if (Read(shortBuffer, 0, 4) < 4)
+					if (ReadTo(shortBuffer, 0, 4) < 4)
 					{
 						throw CreateJsonParseException("Unterminated escape char.");
 					}
@@ -481,7 +516,7 @@ namespace SGson.IO
 			int c1 = Peek();
 			if (c1 == 'A' || c1 == 'a')
 			{
-				int count = Read(shortBuffer, 0, 4);
+				int count = ReadTo(shortBuffer, 0, 4);
 				if (count < 4)
 				{
 					throw CreateJsonParseException("Unterminated 'false' token.");
@@ -515,7 +550,7 @@ namespace SGson.IO
 			int c1 = Peek();
 			if (c1 == 'R' || c1 == 'r')
 			{
-				int count = Read(shortBuffer, 0, 3);
+				int count = ReadTo(shortBuffer, 0, 3);
 				if (count < 3)
 				{
 					throw CreateJsonParseException("Unterminated 'true' token.");
@@ -542,7 +577,7 @@ namespace SGson.IO
 				}
 				throw CreateJsonParseException(String.Format("Unexpected char code at the beginning of null: {0}.", c));
 			}
-			int count = Read(shortBuffer, 0, 3);
+			int count = ReadTo(shortBuffer, 0, 3);
 			if (count < 3)
 			{
 				throw CreateJsonParseException("Unterminated 'null' token.");
@@ -601,43 +636,43 @@ namespace SGson.IO
 			{
 				throw CreateJsonParseException(String.Format("Unexpected char '{0}' as the first character of the variable name.", (char)c));
 			}
-			List<char> chars = new List<char>();
-			chars.Add((char)c);
-			while (true)
+			stringBuffer[0] = (char)c;
+			for (stringBufferPos = 1; stringBufferPos < maxLengthToPool; stringBufferPos++)
 			{
 				c = PeekSkipWhite();
-				if (c == -1)
+				if (c == -1 || varNameCharMap[c] == VarNameCharType.Invalid)
 				{
-					break;
-				}
-				if (varNameCharMap[c] == VarNameCharType.Invalid)
-				{
-					break;
+					return stringPool.Intern(stringBuffer, stringBufferPos);
 				}
 				else
 				{
-					chars.Add((char)c);
+					stringBuffer[stringBufferPos] = (char)c;
+				}
+				Read();
+			}
+			StringBuilder sb = new StringBuilder().Append(stringBuffer, 0, stringBufferPos);
+			while (true)
+			{
+				for (stringBufferPos = 0; stringBufferPos < stringBuffer.Length; stringBufferPos++)
+				{
+					c = PeekSkipWhite();
+					if (c == -1 || varNameCharMap[c] == VarNameCharType.Invalid)
+					{
+						break;
+					}
+					else
+					{
+						stringBuffer[stringBufferPos] = (char)c;
+					}
 					Read();
 				}
-			}
-			return new String(chars.ToArray());
-		}
-
-		private int Read(char[] buffer, int index, int count)
-		{
-			int number = 0;
-			int end = index + count;
-			for (int i = index; i < end; i++)
-			{
-				int c = Read();
-				if (c == -1)
+				sb.Append(stringBuffer, 0, stringBufferPos);
+				if (stringBufferPos < stringBuffer.Length)
 				{
 					break;
 				}
-				buffer[i] = (char)c;
-				number ++;
 			}
-			return number;
+			return sb.ToString();
 		}
 
 		private int ReadSkipWhite()
@@ -681,10 +716,11 @@ namespace SGson.IO
 			}
 			else
 			{
-				CreateJsonParseException(String.Format("Unterminated char '{0}' as the second character of the comment.", (char)c));
+				throw CreateJsonParseException(String.Format("Unexpected char '{0}' as the second character of the comment.", (char)c));
 			}
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private void onDoubleSlash()
 		{
 			while (true)
@@ -717,6 +753,25 @@ namespace SGson.IO
 			}
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private int ReadTo(char[] buffer, int index, int count)
+		{
+			int number = 0;
+			int end = index + count;
+			for (int i = index; i < end; i++)
+			{
+				int c = Read();
+				if (c == -1)
+				{
+					break;
+				}
+				buffer[i] = (char)c;
+				number ++;
+			}
+			return number;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private int Read()
 		{
 			while (true)
@@ -756,6 +811,7 @@ namespace SGson.IO
 			}
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private int Peek()
 		{
 			while (true)
@@ -769,6 +825,7 @@ namespace SGson.IO
 			}
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public bool HasNextJsonElement()
 		{
 			return PeekSkipWhite() != -1;
