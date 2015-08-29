@@ -24,11 +24,14 @@ namespace SGson.Performance
 				list.Add(scott);
 			}
 			Gson gson = new GsonBuilder().SetVisitedObjectCountLimit(int.MaxValue).Create();
-			Stopwatch stopWatch = new Stopwatch();
-			stopWatch.Start();
-			gson.ToJson(list);
-			stopWatch.Stop();
-			Console.WriteLine(stopWatch.Elapsed.TotalMilliseconds);
+			for (int i = 0; i < 100; i++)
+			{
+				Stopwatch stopWatch = new Stopwatch();
+				stopWatch.Start();
+				gson.ToJson(list);
+				stopWatch.Stop();
+				Console.WriteLine(stopWatch.Elapsed.TotalMilliseconds);
+			}
 		}
 	}
 
