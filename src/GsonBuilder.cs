@@ -14,7 +14,7 @@ namespace SGson
 		private Dictionary<Type, ATypeAdapter> typeAdapterDictionary = new Dictionary<Type, ATypeAdapter>();
 		private List<ABreakInterceptor> breakInterceptorList = new List<ABreakInterceptor>();
 		private int visitedObjectStackLength;
-		private int visitedObjectCountLimit;
+		private long visitedObjectCountLimit;
 
 		public GsonBuilder()
 			: this(Gson.DefaultSerializerDictionary,
@@ -29,7 +29,7 @@ namespace SGson
 			Dictionary<Type, ATypeAdapter> typeAdapterDictionary,
 			List<ABreakInterceptor> breakInterceptorList,
 			int visitedObjectStackLength,
-			int visitedObjectCountLimit)
+			long visitedObjectCountLimit)
 		{
 			this.visitedObjectStackLength = visitedObjectStackLength;
 			this.visitedObjectCountLimit = visitedObjectCountLimit;

@@ -66,7 +66,7 @@ namespace SGson
 		internal Dictionary<Type, ATypeAdapter> TypeAdapterDictionary = new Dictionary<Type, ATypeAdapter>();
 		internal List<ABreakInterceptor> BreakInterceptorList = new List<ABreakInterceptor>();
 		internal int VisitedObjectStackLength;
-		internal int VisitedObjectCountLimit;
+		internal long VisitedObjectCountLimit;
 
 		private Stack<object> visitedObjectStack = new Stack<object>();
 		private int allVisitedOjectCount = 0;
@@ -84,7 +84,7 @@ namespace SGson
 			Dictionary<Type, ATypeAdapter> typeAdapterDictionary,
 			List<ABreakInterceptor> breakInterceptorList,
 			int visitedObjectStackLength,
-			int visitedObjectCountLimit)
+			long visitedObjectCountLimit)
 		{
 			this.VisitedObjectStackLength = visitedObjectStackLength;
 			this.VisitedObjectCountLimit = visitedObjectCountLimit;

@@ -20,5 +20,7 @@ namespace SGson.Test.Entity
 		public string StringEscape { get; set; }
 		public string StringSingleQuote { get; set; }
 		public string StringDoubleQuote { get; set; }
+
+		public string LongLongLongLongLongLongLongLongString { get; set; }
 	}
 }

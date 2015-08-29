@@ -81,7 +81,6 @@ namespace SGson.Test
 			{
 				Console.Write("-");
 			}
-			// Console.WriteLine(gson.ToJson(obj));
 			if (gson.ToJson(obj) == str)
 			{
 				Console.Write("---- [");
@@ -97,6 +96,7 @@ namespace SGson.Test
 				Console.Write("Failed");
 				Console.ForegroundColor = ConsoleColor.Black;
 				Console.WriteLine("]");
+				Console.WriteLine(gson.ToJson(obj));
 			}
 		}
 
