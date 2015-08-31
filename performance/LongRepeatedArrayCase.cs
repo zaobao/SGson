@@ -6,7 +6,7 @@ using SGson;
 
 namespace SGson.Performance
 {
-	public class LongRepeatedArrayCase()
+	public class LongRepeatedArrayCase
 	{
 		public static void Main()
 		{

@@ -109,7 +109,7 @@ namespace SGson
 			return this;
 		}
 
-		public GsonBuilder SetVisitedObjectCountLimit(int countLimit)
+		public GsonBuilder SetVisitedObjectCountLimit(long countLimit)
 		{
 			visitedObjectCountLimit = countLimit;
 			return this;

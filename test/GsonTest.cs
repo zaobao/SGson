@@ -17,8 +17,9 @@ namespace SGson.Test
 		{
 			Gson gson = new Gson();
 			string str = null;
+			ConsoleColor dfc = Console.ForegroundColor;
 			Console.Write("Check Null ");
-			for (int i = 0; i < Math.Max(Console.WindowWidth - 20, 4); i++)
+			for (int i = 0; i < Math.Max(Console.WindowWidth - 20 - 1, 4); i++)
 			{
 				Console.Write("-");
 			}
@@ -27,15 +28,15 @@ namespace SGson.Test
 				Console.Write("---- [");
 				Console.ForegroundColor = ConsoleColor.Green;
 				Console.Write("OK");
-				Console.ForegroundColor = ConsoleColor.Black;
-				Console.Write("]");
+				Console.ForegroundColor = dfc;
+				Console.WriteLine("]");
 			}
 			else
 			{
 				Console.Write(" [");
 				Console.ForegroundColor = ConsoleColor.Red;
 				Console.Write("Failed");
-				Console.ForegroundColor = ConsoleColor.Black;
+				Console.ForegroundColor = dfc;
 				Console.WriteLine("]");
 			}
 		}
@@ -44,8 +45,9 @@ namespace SGson.Test
 		{
 			Gson gson = new Gson();
 			string str = "";
+			ConsoleColor dfc = Console.ForegroundColor;
 			Console.Write("Check EmptyJson ");
-			for (int i = 0; i < Math.Max(Console.WindowWidth - 25, 4); i++)
+			for (int i = 0; i < Math.Max(Console.WindowWidth - 25 - 1, 4); i++)
 			{
 				Console.Write("-");
 			}
@@ -54,15 +56,15 @@ namespace SGson.Test
 				Console.Write("---- [");
 				Console.ForegroundColor = ConsoleColor.Green;
 				Console.Write("OK");
-				Console.ForegroundColor = ConsoleColor.Black;
-				Console.Write("]");
+				Console.ForegroundColor = dfc;
+				Console.WriteLine("]");
 			}
 			else
 			{
 				Console.Write(" [");
 				Console.ForegroundColor = ConsoleColor.Red;
 				Console.Write("Failed");
-				Console.ForegroundColor = ConsoleColor.Black;
+				Console.ForegroundColor = dfc;
 				Console.WriteLine("]");
 			}
 		}
@@ -76,8 +78,9 @@ namespace SGson.Test
 			sr.Close();
 			StreamReader sr1 = new StreamReader("JsonText/AllInOneJsonOutput.txt", Encoding.UTF8);
 			string str = sr1.ReadToEnd();
+			ConsoleColor dfc = Console.ForegroundColor;
 			Console.Write("Check AllInOneCase ");
-			for (int i = 0; i < Math.Max(Console.WindowWidth - 28, 4); i++)
+			for (int i = 0; i < Math.Max(Console.WindowWidth - 28 - 1, 4); i++)
 			{
 				Console.Write("-");
 			}
@@ -86,15 +89,15 @@ namespace SGson.Test
 				Console.Write("---- [");
 				Console.ForegroundColor = ConsoleColor.Green;
 				Console.Write("OK");
-				Console.ForegroundColor = ConsoleColor.Black;
-				Console.Write("]");
+				Console.ForegroundColor = dfc;
+				Console.WriteLine("]");
 			}
 			else
 			{
 				Console.Write(" [");
 				Console.ForegroundColor = ConsoleColor.Red;
 				Console.Write("Failed");
-				Console.ForegroundColor = ConsoleColor.Black;
+				Console.ForegroundColor = dfc;
 				Console.WriteLine("]");
 				Console.WriteLine(gson.ToJson(obj));
 			}
