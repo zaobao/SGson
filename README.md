@@ -67,13 +67,15 @@ SGson默认支持的数组类型有，C#中的数组，继承了IEnumerable<T>�
 
 #### List<T>
 
+反序列化是，如果JS数组对应的变量的类型是object，会默认赋予该object类型变量一个List<T>的对象。
+
 #### IEnumerable<T>
 
 #### ICollection<T>
 
 #### Stack<T>
 
-Stack<T>依照先进后出的方式处理，所以对应到JSON中的数组顺序是反的
+Stack<T>依照先进后出的方式处理，所以对应到JSON中的数组顺序是反的。
 
 #### Queue<T>
 
@@ -183,4 +185,4 @@ JSON中的null会被反序列化为null，如果对应类型是不可位空的�
 
 ### 线程安全
 
-一个SGson对象虽然可以安全地重复使用，但并不是线程安全的。如果考虑多线程，请使用ThreadLocal。
+一个SGson对象虽然可以安全地重复使用，但并不是线程安全的。如果考虑用在多线程程序中，请使用ThreadLocal。
