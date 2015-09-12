@@ -276,7 +276,7 @@ namespace SGson.IO
 					}
 					try
 					{
-						return new JsonNumber(Double.Parse(new String(chars.ToArray())));
+						return new JsonNumber(new String(chars.ToArray()));
 					}
 					catch (Exception e)
 					{
@@ -367,7 +367,7 @@ namespace SGson.IO
 				}
 				try
 				{
-					return new JsonNumber(Double.Parse(new String(chars.ToArray())));
+					return new JsonNumber(new String(chars.ToArray()));
 				}
 				catch (Exception e)
 				{

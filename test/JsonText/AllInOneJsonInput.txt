@@ -35,8 +35,8 @@
 		SbyteNull: null
 	},
 	Int64Case: {
-		Int64MinValue: -9007199254740991,
-		Int64MaxValue: 9007199254740991,
+		Int64MinValue: -9223372036854775808,
+		Int64MaxValue: 9223372036854775807,
 		Int64FromDecimal: 10.11111,
 	},
 	somethingnotexists: { // Something ignored, because no corresponding property
@@ -44,7 +44,7 @@
 	},
 	UInt64Case: {
 		UInt64MinValue: 0.0000000,
-		UInt64MaxValue: 9007199254740991,
+		UInt64MaxValue: 18446744073709551615,
 		UInt64Null: null,
 		UInt64FromDecimal: 1.11111,
 	},
@@ -64,6 +64,7 @@
 		DoubleEpsilon: -4.94065645841247E-324,
 		DoubleUnderflow: -2.47032822920623E-324,
 		DoubleNotUnderflow: -2.47032822920624E-324,
+		DoublePrcision: 1.1111111111111111111111111111111111111
 	},
 	ArrayCase: {
 		ArrayNull: null,

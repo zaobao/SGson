@@ -24,7 +24,7 @@ namespace SGson.Deserializers
 			}
 			if (x is JsonNumber)
 			{
-				return (sbyte)(double)(JsonNumber)x;
+				return (sbyte)(JsonNumber)x;
 			}
 			throw new Exception(String.Format("Type not match, can not convert {0} to sbyte, JsonElement: {1}.", x.GetType(), x.ToString()));
 
@@ -37,7 +37,7 @@ namespace SGson.Deserializers
 			}
 			if (x is JsonNumber)
 			{
-				return (byte)(double)(JsonNumber)x;
+				return (byte)(JsonNumber)x;
 			}
 			throw new Exception(String.Format("Type not match, can not convert {0} to byte, JsonElement: {1}.", x.GetType(), x.ToString()));
 		}
@@ -49,7 +49,7 @@ namespace SGson.Deserializers
 			}
 			if (x is JsonNumber)
 			{
-				return (int)(double)(JsonNumber)x;
+				return (int)(JsonNumber)x;
 			}
 			throw new Exception(String.Format("Type not match, can not convert {0} to int, JsonElement: {1}.", x.GetType(), x.ToString()));
 		}
@@ -61,7 +61,7 @@ namespace SGson.Deserializers
 			}
 			if (x is JsonNumber)
 			{
-				return (uint)(double)(JsonNumber)x;
+				return (uint)(JsonNumber)x;
 			}
 			throw new Exception(String.Format("Type not match, can not convert {0} to uint, JsonElement: {1}.", x.GetType(), x.ToString()));
 		}
@@ -73,7 +73,7 @@ namespace SGson.Deserializers
 			}
 			if (x is JsonNumber)
 			{
-				return (long)(double)(JsonNumber)x;
+				return (long)(JsonNumber)x;
 			}
 			throw new Exception(String.Format("Type not match, can not convert {0} to long, JsonElement: {1}.", x.GetType(), x.ToString()));
 		}
@@ -85,7 +85,7 @@ namespace SGson.Deserializers
 			}
 			if (x is JsonNumber)
 			{
-				return (ulong)(double)(JsonNumber)x;
+				return (ulong)(JsonNumber)x;
 			}
 			throw new Exception(String.Format("Type not match, can not convert {0} to ulong, JsonElement: {1}.", x.GetType(), x.ToString()));
 		}
@@ -97,7 +97,7 @@ namespace SGson.Deserializers
 			}
 			if (x is JsonNumber)
 			{
-				return (float)(double)(JsonNumber)x;
+				return (float)(JsonNumber)x;
 			}
 			throw new Exception(String.Format("Type not match, can not convert {0} to float, JsonElement: {1}.", x.GetType(), x.ToString()));
 		}
@@ -121,7 +121,7 @@ namespace SGson.Deserializers
 			}
 			if (x is JsonNumber)
 			{
-				return (decimal)(double)(JsonNumber)x;
+				return (decimal)(JsonNumber)x;
 			}
 			throw new Exception(String.Format("Type not match, can not convert {0} to decimal, JsonElement: {1}.", x.GetType(), x.ToString()));
 		}

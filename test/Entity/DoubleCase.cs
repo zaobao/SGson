@@ -18,5 +18,6 @@ namespace SGson.Test.Entity
 		public double DoubleEpsilon { get; set; }
 		public double DoubleUnderflow  { get; set; }
 		public double DoubleNotUnderflow  { get; set; }
+		public double DoublePrcision  { get; set; }
 	}
 }

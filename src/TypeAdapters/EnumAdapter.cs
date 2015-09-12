@@ -15,7 +15,6 @@ namespace SGson.TypeAdapters
 
 		public override object Deserialize(JsonElement je, Type originalType)
 		{
-
 			if (je == null || je.IsJsonNull)
 			{
 				return Enum.Parse(originalType, "0");

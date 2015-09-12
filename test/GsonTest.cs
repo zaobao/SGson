@@ -17,7 +17,9 @@ namespace SGson.Test
 		{
 			Gson gson = new Gson();
 			string str = null;
-			ConsoleColor dfc = Console.ForegroundColor;
+			ConsoleColor dfc = ConsoleColor.Black;
+			Console.ForegroundColor = dfc;
+			Console.BackgroundColor = ConsoleColor.White;
 			Console.Write("Check Null ");
 			for (int i = 0; i < Math.Max(Console.WindowWidth - 20 - 1, 4); i++)
 			{
