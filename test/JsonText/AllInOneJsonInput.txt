@@ -149,5 +149,17 @@
 		Day6: 6,
 		Day7: 7,
 		DayString4: "4",
+	},
+	DateTimeCase: {
+		DateTimeNull: null,
+		DateTimeMinValue: "0001-01-01 00:00:00",
+		DateTimeMaxValue: "9999-12-31 23:59:59",
+		DateTimeFromXML: "2015-09-29 10:29:31"
+	},
+	NullableCase: {
+		NullableUInt64Null: null,
+		NullableDateTime64MinValue: "0001-01-01 00:00:00",
+		NullableInt64MaxValue: 9223372036854775807,
+		NullableUInt64FromDecimal: 2.11111
 	}
 }

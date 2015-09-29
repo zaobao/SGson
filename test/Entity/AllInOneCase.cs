@@ -23,5 +23,7 @@ namespace SGson.Test.Entity
 		public StackCase StackCase { get; set; }
 		public QueueCase QueueCase { get; set; }
 		public EnumCase EnumCase { get; set; }
+		public DateTimeCase DateTimeCase { get; set; }
+		public NullableCase NullableCase { get; set; }
 	}
 }

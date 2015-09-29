@@ -175,6 +175,8 @@ JSON中的null会被反序列化为null，如果对应类型是不可位空的�
 
 序列化时为null的字段也会被序列化为null元素，而不是跳过忽略。
 
+JSON中没有出现的字段会被忽略，反序列化完后值就是default(x)。
+
 如果整个JSON字符串是空字符串——""，那么也会被反序列化会null，反之null不会被序列化为空字符串，而是null元素。
 
 
@@ -185,4 +187,39 @@ JSON中的null会被反序列化为null，如果对应类型是不可位空的�
 
 ### 线程安全
 
-一个SGson对象虽然可以安全地重复使用，但并不是线程安全的。如果考虑用在多线程程序中，请使用ThreadLocal。
+一个SGson对象虽然可以安全地重复使用，但并不是线程安全的。如果考虑用在多线程程序中，请使用ThreadLocal，示例如下
+```csharp
+public class JsonUtils
+{
+	private static readonly GsonBuilder builder = new GsonBuilder()
+		.SetVisitedObjectCountLimit(int.MaxValue)
+		.SetVisitedObjectStackLength(8);
+	private static ThreadLocal<Gson> gsons = new ThreadLocal<Gson>();
+
+	private static Gson GsonInstance
+	{
+		get
+		{
+			if (gsons.IsValueCreated)
+			{
+				return gsons.Value;
+			}
+			else
+			{
+				gsons.Value = builder.Create();
+				return gsons.Value;
+			}
+		}
+	}
+
+	public static string ToJson(object obj)
+	{
+		return GsonInstance.ToJson(obj);
+	}
+
+	public static T FromJson<T>(string json)
+	{
+		return GsonInstance.FromJson<T>(json);
+	}
+}
+```
