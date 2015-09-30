@@ -36,8 +36,7 @@ namespace SGson.Reflection {
 					.ToDictionary(k => k.Name, v => v);
 				lock(publicGettableFieldsMap)
 				{
-					Dictionary<string, PropertyInfo> result;
-					if (!publicGettableFieldsMap.TryGetValue(t, out result))
+					if (!publicGettableFieldsMap.ContainsKey(t))
 					{
 						publicGettableFieldsMap.Add(t, map);
 					}
@@ -57,8 +56,7 @@ namespace SGson.Reflection {
 					.ToDictionary(k => k.Name, v => v);
 				lock(publicSettableFieldsMap)
 				{
-					Dictionary<string, PropertyInfo> result;
-					if (!publicSettableFieldsMap.TryGetValue(t, out result))
+					if (!publicSettableFieldsMap.ContainsKey(t))
 					{
 						publicSettableFieldsMap.Add(t, map);
 					}
