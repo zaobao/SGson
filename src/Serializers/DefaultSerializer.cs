@@ -16,6 +16,14 @@ namespace SGson.Serializers
 		{
 			return (JsonElement)(byte)x;
 		}
+		public static JsonElement SerializeInt16(object x)
+		{
+			return (JsonElement)(short)x;
+		}
+		public static JsonElement SerializeUInt16(object x)
+		{
+			return (JsonElement)(ushort)x;
+		}
 		public static JsonElement SerializeInt32(object x)
 		{
 			return (JsonElement)(int)x;

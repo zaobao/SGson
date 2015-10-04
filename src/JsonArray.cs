@@ -63,6 +63,11 @@ namespace SGson
 			elements.AddRange(array.elements);
 		}
 
+		public void Reverse ()
+		{
+			elements.Reverse();
+		}
+
 		public static implicit operator JsonArray(List<JsonElement> jsonElements)
 		{
 			return new JsonArray(jsonElements);

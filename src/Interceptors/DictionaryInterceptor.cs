@@ -11,7 +11,6 @@ namespace SGson.Interceptors
 	{
 		private static readonly Type mGenericTypeDefinition = typeof(IDictionary<,>);
 		private static readonly Type mDicDefinition = typeof(Dictionary<,>);
-		private static readonly Type mStringType = typeof(String);
 
 		public override bool IsSerializable(object obj)
 		{
@@ -20,16 +19,8 @@ namespace SGson.Interceptors
 
 		public override bool IsDeserializable(Type type)
 		{
-			Type idType = type.GetInterface("System.Collections.Generic.IDictionary`2");
-			if (idType != null)
-			{
-				return idType.GetGenericArguments()[0] == mStringType;
-			}
-			if (type.IsGenericType && type.GetGenericTypeDefinition() == mGenericTypeDefinition)
-			{
-				return type.GetGenericArguments()[0] == mStringType;
-			}
-			return false;
+			return type.GetInterface("System.Collections.Generic.IDictionary`2") != null ||
+				type.IsGenericType && type.GetGenericTypeDefinition() == mGenericTypeDefinition;
 		}
 
 		public override JsonElement InterceptWhenSerialize(object o)
@@ -38,7 +29,13 @@ namespace SGson.Interceptors
 			IDictionary dic = (IDictionary)o;
 			foreach (object key in dic.Keys)
 			{
-				jm.Add(key.ToString(), Context.ToJsonTree(dic[key]));
+				JsonString keyStr = null;
+				keyStr = Context.ToJsonTree(key) as JsonString;
+				if (keyStr == null)
+				{
+					keyStr = key.ToString();
+				}
+				jm.Add(keyStr, Context.ToJsonTree(dic[key]));
 			}
 			return jm;
 		}
@@ -71,9 +68,18 @@ namespace SGson.Interceptors
 			MethodInfo method = implType.GetMethod("Add");
 			foreach (KeyValuePair<string,JsonElement> kv in jm)
 			{
+				object key = null;
+				try
+				{
+					key = Context.FromJsonTree(kv.Key, genericArguments[0]);
+				}
+				catch (Exception)
+				{
+					key = Convert.ChangeType(kv.Key, genericArguments[0]);
+				}
 				method.Invoke(o, new Object[]
 				{
-					kv.Key,
+					key,
 					Context.FromJsonTree(kv.Value, genericArguments[1])
 				});
 			}

@@ -19,6 +19,8 @@ namespace SGson
 			{typeof(bool), DefaultSerializer.SerializeBoolean},
 			{typeof(sbyte), DefaultSerializer.SerializeSbyte},
 			{typeof(byte), DefaultSerializer.SerializeByte},
+			{typeof(short), DefaultSerializer.SerializeInt16},
+			{typeof(ushort), DefaultSerializer.SerializeUInt16},
 			{typeof(int), DefaultSerializer.SerializeInt32},
 			{typeof(uint), DefaultSerializer.SerializeUInt32},
 			{typeof(long), DefaultSerializer.SerializeInt64},
@@ -34,6 +36,8 @@ namespace SGson
 			{typeof(bool), DefaultDeserializer.DeserializeBoolean},
 			{typeof(sbyte), DefaultDeserializer.DeserializeSbyte},
 			{typeof(byte), DefaultDeserializer.DeserializeByte},
+			{typeof(short), DefaultDeserializer.DeserializeInt16},
+			{typeof(ushort), DefaultDeserializer.DeserializeUInt16},
 			{typeof(int), DefaultDeserializer.DeserializeInt32},
 			{typeof(uint), DefaultDeserializer.DeserializeUInt32},
 			{typeof(long), DefaultDeserializer.DeserializeInt64},
@@ -138,7 +142,7 @@ namespace SGson
 			return FromJson<T>(stringReader);
 		}
 
-		protected internal JsonElement ToJsonTree(object obj)
+		public JsonElement ToJsonTree(object obj)
 		{
 			allVisitedOjectCount++;
 			if (allVisitedOjectCount > VisitedObjectCountLimit)
@@ -185,7 +189,7 @@ namespace SGson
 			return JsonNull.Instance;
 		}
 
-		protected internal object FromJsonTree(JsonElement je, Type type)
+		public object FromJsonTree(JsonElement je, Type type)
 		{
 			for (int i = InterceptorList.Count - 1; i >= 0; i--)
 			{

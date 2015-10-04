@@ -8,6 +8,8 @@ namespace SGson
 		private sbyte? sbyteValue;
 		private byte? byteValue;
 		private char? charValue;
+		private short? shortValue;
+		private ushort? ushortValue;
 		private int? intValue;
 		private uint? uintValue;
 		private long? longValue;
@@ -81,6 +83,52 @@ namespace SGson
 						charValue = (char)double.Parse(stringValue);
 					}
 					return charValue.Value;
+				}
+			}
+		}
+
+		public short ShortValue
+		{
+			get
+			{
+				if (shortValue.HasValue)
+				{
+					return shortValue.Value;
+				}
+				else
+				{
+					try
+					{
+						shortValue = short.Parse(stringValue);
+					}
+					catch (FormatException)
+					{
+						shortValue = (short)double.Parse(stringValue);
+					}
+					return shortValue.Value;
+				}
+			}
+		}
+
+		public ushort UShortValue
+		{
+			get
+			{
+				if (ushortValue.HasValue)
+				{
+					return ushortValue.Value;
+				}
+				else
+				{
+					try
+					{
+						ushortValue = ushort.Parse(stringValue);
+					}
+					catch (FormatException)
+					{
+						ushortValue = (ushort)double.Parse(stringValue);
+					}
+					return ushortValue.Value;
 				}
 			}
 		}
@@ -243,6 +291,18 @@ namespace SGson
 			initStringValue(value);
 		}
 
+		public JsonNumber(short value)
+		{
+			this.shortValue = value;
+			initStringValue(value);
+		}
+
+		public JsonNumber(ushort value)
+		{
+			this.ushortValue = value;
+			initStringValue(value);
+		}
+
 		public JsonNumber(int value)
 		{
 			this.intValue = value;
@@ -308,6 +368,16 @@ namespace SGson
 		}
 
 		public static implicit operator JsonNumber(byte value)
+		{
+			return new JsonNumber(value);
+		}
+
+		public static implicit operator JsonNumber(short value)
+		{
+			return new JsonNumber(value);
+		}
+
+		public static implicit operator JsonNumber(ushort value)
 		{
 			return new JsonNumber(value);
 		}
@@ -382,6 +452,16 @@ namespace SGson
 		public static explicit operator char(JsonNumber element)
 		{
 			return element.CharValue;
+		}
+
+		public static explicit operator short(JsonNumber element)
+		{
+			return element.ShortValue;
+		}
+
+		public static explicit operator ushort(JsonNumber element)
+		{
+			return element.UShortValue;
 		}
 
 		public static explicit operator int(JsonNumber element)

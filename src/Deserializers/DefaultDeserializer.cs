@@ -41,6 +41,30 @@ namespace SGson.Deserializers
 			}
 			throw new Exception(String.Format("Type not match, can not convert {0} to byte, JsonElement: {1}.", x.GetType(), x.ToString()));
 		}
+		public static object DeserializeInt16(JsonElement x)
+		{
+			if (x == null || x is JsonNull)
+			{
+				return (short)0;
+			}
+			if (x is JsonNumber)
+			{
+				return (short)(JsonNumber)x;
+			}
+			throw new Exception(String.Format("Type not match, can not convert {0} to short, JsonElement: {1}.", x.GetType(), x.ToString()));
+		}
+		public static object DeserializeUInt16(JsonElement x)
+		{
+			if (x == null || x is JsonNull)
+			{
+				return (ushort)0;
+			}
+			if (x is JsonNumber)
+			{
+				return (ushort)(JsonNumber)x;
+			}
+			throw new Exception(String.Format("Type not match, can not convert {0} to short, JsonElement: {1}.", x.GetType(), x.ToString()));
+		}
 		public static object DeserializeInt32(JsonElement x)
 		{
 			if (x == null || x is JsonNull)

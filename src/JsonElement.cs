@@ -54,6 +54,16 @@ namespace SGson
 			return new JsonNumber(value);
 		}
 
+		public static implicit operator JsonElement(short value)
+		{
+			return new JsonNumber(value);
+		}
+
+		public static implicit operator JsonElement(ushort value)
+		{
+			return new JsonNumber(value);
+		}
+
 		public static implicit operator JsonElement(int value)
 		{
 			return new JsonNumber(value);

@@ -19,8 +19,7 @@ namespace SGson.Interceptors
 
 		public override bool IsDeserializable(Type type)
 		{
-			return !typeof(String).IsAssignableFrom(type) &&
-				type.IsGenericType && type.GetGenericTypeDefinition() == mGenericTypeDefinition;
+			return type.IsGenericType && type.GetGenericTypeDefinition() == mGenericTypeDefinition;
 		}
 
 		public override JsonElement InterceptWhenSerialize(object o)

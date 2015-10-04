@@ -117,6 +117,15 @@
 				"a": 0x61,
 				"d": 0x64
 			}
+		},
+		DictionaryUintKey:
+		{
+			"1": "1","2":"2","3":"3000"
+		},
+		DictionaryNullableDateTimeKey:
+		{
+			"0001-01-01 00:00:00" : "DateTimeMinValue",
+			"9999-12-31 23:59:59" : "DateTimeMaxValue"
 		}
 	},
 	"EnumerableCase": {
@@ -135,13 +144,17 @@
 		QueueNull: null,
 		QueueEmpty: [],
 		QueueCommon: ["1", 2, "erwerwe", {"2213": "erdsf", erwe: 3423.5}],
-		QueueInQueue: [[2.3,434,34.343],[34324,.3434,0.2343,0,0x123]]
+		QueueInQueue: [[2.3,434,34.343],[34324,.3434,0.2343,0,0x123]],
+		MyQueueInMyQueue: [[2.43,454,14.343],[24324,.5434,0.3343,0,0x143]],
+		ClosedQueueInt: [2.6, 5, 0.1, 0x345]
 	},
 	"StackCase": {
 		StackNull: null,
 		StackEmpty: [],
 		StackCommon: ["1", "2", "erwerwe", [3223, 2312, "tuer", false, null], null],
-		StackInStack: [[23,43,0x34],[34,128,255,0,0O40]]
+		StackInStack: [[23,43,0x34],[34,128,255,0,0O40]],
+		MyStack: [10,33,              44],
+		ClosedStack: [0, -1.2, 56, 0b101, null,]
 	},
 	EnumCase: {
 		Monday: "Monday",

@@ -11,21 +11,39 @@ namespace SGson.Interceptors
 	{
 		private static readonly Type mStackType = typeof(Stack<>);
 
-		// Not use to serialize Stack<T>
+		private static Type GetStackType(Type type)
+		{
+			while(type != null && 
+				!(type.IsGenericType && type.GetGenericTypeDefinition() == mStackType))
+			{
+				type = type.BaseType;
+			}
+			return type;
+		}
+
 		public override bool IsSerializable(object obj)
 		{
-			return false;
+			if (obj == null)
+			{
+				return false;
+			}
+			return GetStackType(obj.GetType()) != null;
 		}
 
 		public override bool IsDeserializable(Type type)
 		{
-			return type.GetInterface("System.Collections.Generic.Stack`1") != null ||
-				type.IsGenericType && type.GetGenericTypeDefinition() == mStackType;
+			return GetStackType(type) != null;
 		}
 
 		public override JsonElement InterceptWhenSerialize(object o)
 		{
-			return null;
+			JsonArray ja = new JsonArray();
+			foreach (object item in (IEnumerable)o)
+			{
+				ja.Add(Context.ToJsonTree(item));
+			}
+			ja.Reverse();
+			return ja;
 		}
 
 		public override object InterceptWhenDeserialize(JsonElement je, Type type)
@@ -39,7 +57,7 @@ namespace SGson.Interceptors
 				throw new Exception("Expect an array, but " + je);
 			}
 			JsonArray ja = (JsonArray)je;
-			Type[] genericArguments = type.GetGenericArguments();
+			Type[] genericArguments = GetStackType(type).GetGenericArguments();
 			object o = PocsoUtils.GetInstance(type);
 			MethodInfo method = type.GetMethod("Push");
 			foreach (JsonElement element in ja)

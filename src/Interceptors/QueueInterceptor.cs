@@ -11,6 +11,16 @@ namespace SGson.Interceptors
 	{
 		private static readonly Type mQueueType = typeof(Queue<>);
 
+		private static Type GetQueueType(Type type)
+		{
+			while(type != null && 
+				!(type.IsGenericType && type.GetGenericTypeDefinition() == mQueueType))
+			{
+				type = type.BaseType;
+			}
+			return type;
+		}
+
 		// Not use to serialize Queue<T>
 		public override bool IsSerializable(object obj)
 		{
@@ -19,8 +29,7 @@ namespace SGson.Interceptors
 
 		public override bool IsDeserializable(Type type)
 		{
-			return type.GetInterface("System.Collections.Generic.Queue`1") != null ||
-				type.IsGenericType && type.GetGenericTypeDefinition() == mQueueType;
+			return GetQueueType(type) != null;
 		}
 
 		public override JsonElement InterceptWhenSerialize(object o)
@@ -39,7 +48,7 @@ namespace SGson.Interceptors
 				throw new Exception("Expect an array, but " + je);
 			}
 			JsonArray ja = (JsonArray)je;
-			Type[] genericArguments = type.GetGenericArguments();
+			Type[] genericArguments = GetQueueType(type).GetGenericArguments();
 			object o = PocsoUtils.GetInstance(type);
 			MethodInfo method = type.GetMethod("Enqueue");
 			foreach (JsonElement element in ja)
