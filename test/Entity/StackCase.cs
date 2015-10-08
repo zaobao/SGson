@@ -19,7 +19,7 @@ namespace SGson.Test.Entity
 		public Stack<ulong> StackEmpty { get; set; }
 		public Stack<object> StackCommon { get; set; }
 		public Stack<Stack<byte>> StackInStack { get; set; }
-		public MyStack<int> MyStack { get; set; }
+		public MyStack<int> OpenStack { get; set; }
 		public MyStackShort ClosedStack { get; set; }
 	}
 }

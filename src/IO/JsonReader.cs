@@ -20,10 +20,13 @@ namespace SGson.IO
 		private int column = 0;
 		private int position = 0;
 		private Queue<char> charQueue = new Queue<char>();
+        private int charQueueMaxLength = 30;
 
 		private static IgnoredCharMap ignoredCharMap = IgnoredCharMap.Instance;
 		private static WhiteCharMap whiteCharMap = WhiteCharMap.Instance;
 		private static VarNameCharMap varNameCharMap = VarNameCharMap.Instance;
+
+        private int? peekBlockBuffer;
 
 		private char[] shortBuffer = new char[4];
 
@@ -686,7 +689,7 @@ namespace SGson.IO
 		{
 			while (true)
 			{
-				int c = reader.Peek();
+				int c = Peek();
 				if (c == '/')
 				{
 					Read();
@@ -774,56 +777,61 @@ namespace SGson.IO
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private int Read()
 		{
-			while (true)
-			{
-				int c = reader.Read();
-				if (c == -1)
-				{
-					return -1;
-				}
-				else
-				{
-					if (charQueue.Count > 15)
-					{
-						charQueue.Dequeue();
-					}
-					position++;
-					if (c == '\r')
-					{
-						line++;
-						column = 0;
-					}
-					else if (c == '\n' && charQueue.LastOrDefault() != '\r')
-					{
-						line++;
-						column = 0;
-					}
-					else
-					{
-						column++;
-					}
-					charQueue.Enqueue((char)c);
-					if (ignoredCharMap[c] == IgnoredCharType.Etc)
-					{
-						return c;
-					}
-				}
-			}
+            if (peekBlockBuffer == null)
+            {
+                _readBuffer();
+            }
+            int c = peekBlockBuffer.GetValueOrDefault();
+            _readBuffer();
+            return c;
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private int Peek()
 		{
-			while (true)
-			{
-				int c = reader.Peek();
-				if (c == -1 || ignoredCharMap[c] == IgnoredCharType.Etc)
-				{
-					return c;
-				}
-				Read();
-			}
+            if (peekBlockBuffer == null)
+            {
+                _readBuffer();
+            }
+            return peekBlockBuffer.GetValueOrDefault();
 		}
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void _readBuffer()
+        {
+            while (true)
+            {
+                int c = reader.Read();
+                peekBlockBuffer = c;
+                if (c != -1)
+                {
+                    if (charQueue.Count > charQueueMaxLength)
+                    {
+                        charQueue.Dequeue();
+                    }
+                    position++;
+                    if (c == '\r')
+                    {
+                        line++;
+                        column = 0;
+                    }
+                    else if (c == '\n' && charQueue.LastOrDefault() != '\r')
+                    {
+                        line++;
+                        column = 0;
+                    }
+                    else
+                    {
+                        column++;
+                    }
+                    charQueue.Enqueue((char)c);
+                }
+                if (c == -1 || ignoredCharMap[c] == IgnoredCharType.Etc)
+                {
+                    break;
+                }
+            }
+        }
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public bool HasNextJsonElement()
