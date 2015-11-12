@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -10,8 +11,8 @@ namespace SGson.Reflection {
 		protected static readonly Object[] EmptyObjects = new Object[0];
 		protected static readonly ParameterModifier[] EmptyParameterModifiers = new ParameterModifier[0];
 
-		protected static Dictionary<Type, Dictionary<string, PropertyInfo>> publicGettableFieldsMap = new Dictionary<Type, Dictionary<string, PropertyInfo>>();
-		protected static Dictionary<Type, Dictionary<string, PropertyInfo>> publicSettableFieldsMap = new Dictionary<Type, Dictionary<string, PropertyInfo>>();
+        protected static ConcurrentDictionary<Type, Dictionary<string, PropertyInfo>> publicGettableFieldsMap = new ConcurrentDictionary<Type, Dictionary<string, PropertyInfo>>();
+        protected static ConcurrentDictionary<Type, Dictionary<string, PropertyInfo>> publicSettableFieldsMap = new ConcurrentDictionary<Type, Dictionary<string, PropertyInfo>>();
 
 		public static object GetInstance(Type t)
 		{
@@ -34,13 +35,7 @@ namespace SGson.Reflection {
 					// Must have a pulic get method, and the indexer will be ignored.
 					.Where(x => x.GetGetMethod(false) != null &&　x.GetIndexParameters().Length == 0)
 					.ToDictionary(k => k.Name, v => v);
-				lock(publicGettableFieldsMap)
-				{
-					if (!publicGettableFieldsMap.ContainsKey(t))
-					{
-						publicGettableFieldsMap.Add(t, map);
-					}
-				}
+					publicGettableFieldsMap.TryAdd(t, map);
 			}
 			return map;
 		}
@@ -54,13 +49,7 @@ namespace SGson.Reflection {
 					// Must have a pulic set method, and the indexer will be ignored.
 					.Where(x => x.GetSetMethod(false) != null &&　x.GetIndexParameters().Length == 0)
 					.ToDictionary(k => k.Name, v => v);
-				lock(publicSettableFieldsMap)
-				{
-					if (!publicSettableFieldsMap.ContainsKey(t))
-					{
-						publicSettableFieldsMap.Add(t, map);
-					}
-				}
+					publicSettableFieldsMap.TryAdd(t, map);
 			}
 			return map;
 		}
