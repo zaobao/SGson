@@ -11,8 +11,8 @@ namespace SGson.Reflection {
 		protected static readonly Object[] EmptyObjects = new Object[0];
 		protected static readonly ParameterModifier[] EmptyParameterModifiers = new ParameterModifier[0];
 
-        protected static ConcurrentDictionary<Type, Dictionary<string, PropertyInfo>> publicGettableFieldsMap = new ConcurrentDictionary<Type, Dictionary<string, PropertyInfo>>();
-        protected static ConcurrentDictionary<Type, Dictionary<string, PropertyInfo>> publicSettableFieldsMap = new ConcurrentDictionary<Type, Dictionary<string, PropertyInfo>>();
+		protected static ConcurrentDictionary<Type, Dictionary<string, PropertyInfo>> publicGettableFieldsMap = new ConcurrentDictionary<Type, Dictionary<string, PropertyInfo>>();
+		protected static ConcurrentDictionary<Type, Dictionary<string, PropertyInfo>> publicSettableFieldsMap = new ConcurrentDictionary<Type, Dictionary<string, PropertyInfo>>();
 
 		public static object GetInstance(Type t)
 		{
