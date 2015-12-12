@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 using SGson.Reflection;
@@ -37,13 +38,18 @@ namespace SGson.Interceptors
 
 		public override JsonElement InterceptWhenSerialize(object o)
 		{
-			JsonArray ja = new JsonArray();
+			IEnumerable<JsonElement> JsonElements = GetJsonElementWithYield(o);
+			JsonElements = JsonElements.Reverse();
+			JsonArray ja = new JsonArray(JsonElements);
+			return ja;
+		}
+
+		private IEnumerable<JsonElement> GetJsonElementWithYield(object o)
+		{
 			foreach (object item in (IEnumerable)o)
 			{
-				ja.Add(Context.ToJsonTree(item));
+				yield return Context.ToJsonTree(item);
 			}
-			ja.Reverse();
-			return ja;
 		}
 
 		public override object InterceptWhenDeserialize(JsonElement je, Type type)

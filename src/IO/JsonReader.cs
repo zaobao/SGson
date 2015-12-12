@@ -193,6 +193,11 @@ namespace SGson.IO
 
 		private JsonArray ReadArray()
 		{
+			return new JsonArray(ReadArrayWithYield());
+		}
+
+		private IEnumerable<JsonElement> ReadArrayWithYield()
+		{
 			int c = ReadSkipWhite();
 			if (c != '[')
 			{
@@ -202,12 +207,11 @@ namespace SGson.IO
 				}
 				throw CreateJsonParseException(String.Format("Unexpected char '{0}' at the beginning of an array.", (char)c));
 			}
-			JsonArray ja = new JsonArray();
 			c = PeekSkipWhite();
 			if (c == ']')
 			{
 				Read();
-				return ja;
+				yield break;
 			}
 			if (c == -1)
 			{
@@ -216,7 +220,7 @@ namespace SGson.IO
 			while (true)
 			{
 				JsonElement value = ReadValue();
-				ja.Add(value);
+				yield return value;
 				c = ReadSkipWhite();
 				if (c == ']')
 				{
@@ -239,7 +243,6 @@ namespace SGson.IO
 					}
 				}
 			}
-			return ja;
 		}
 
 		private JsonNumber ReadNumber()

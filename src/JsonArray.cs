@@ -7,8 +7,9 @@ namespace SGson
 {
 	public class JsonArray : JsonElement, IEnumerable<JsonElement>
 	{
-		private List<JsonElement> elements;
+		private IEnumerable<JsonElement> elements;
 
+/*
 		public int Length
 		{
 			get { return elements.Count; }
@@ -34,6 +35,7 @@ namespace SGson
 		{
 			elements = new List<JsonElement>();
 		}
+*/
 
 		public JsonArray(IEnumerable<JsonElement> jsonElements)
 		{
@@ -49,6 +51,7 @@ namespace SGson
 			return elements.GetEnumerator();
 		}
 
+/*
 		public void Add(JsonElement element)
 		{
 			if (element == JsonNull.Instance)
@@ -77,6 +80,7 @@ namespace SGson
 		{
 			return jsonArray.elements.ToList();
 		}
+*/
 
 	}
 }

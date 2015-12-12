@@ -11,6 +11,8 @@ namespace SGson.Interceptors
 	public class ArrayInterceptor : AInterceptor
 	{
 
+		private static readonly long[] emptyLongArray = new long[0];  
+
 		// Not for one dimensional array
 		public override bool IsSerializable(object obj)
 		{
@@ -24,23 +26,28 @@ namespace SGson.Interceptors
 
 		public override JsonElement InterceptWhenSerialize(object o)
 		{
-			return getJsonElementRecurse((Array)o, 0, new LinkedList<long>());
+			return GetJsonElementRecurse((Array)o, 0, emptyLongArray);
 		}
 
-		private JsonElement getJsonElementRecurse(Array array, int dimension, LinkedList<long> indices)
+		private JsonElement GetJsonElementRecurse(Array array, int dimension, long[] indices)
 		{
 			if (dimension < array.Rank)
 			{
-				JsonArray ja = new JsonArray();
-				for (long i = array.GetLowerBound(dimension); i <= array.GetUpperBound(dimension); i++)
-				{
-					indices.AddLast(i);
-					ja.Add(getJsonElementRecurse(array, dimension + 1, indices));
-					indices.RemoveLast();
-				}
+				JsonArray ja = new JsonArray(GetJsonElementRecurseWithYield(array, dimension, indices));
 				return ja;
 			}
 			return Context.ToJsonTree(array.GetValue(indices.ToArray()));
+		}
+
+		private IEnumerable<JsonElement> GetJsonElementRecurseWithYield(Array array, int dimension, long[] indices)
+		{
+			for (long i = array.GetLowerBound(dimension); i <= array.GetUpperBound(dimension); i++)
+			{
+				long[] newIndices = new long[dimension + 1];
+				Array.Copy(indices, newIndices, indices.Length);
+				newIndices[dimension] = i;
+				yield return GetJsonElementRecurse(array, dimension + 1, newIndices);
+			}
 		}
 
 		public override object InterceptWhenDeserialize(JsonElement je, Type type)
@@ -64,11 +71,13 @@ namespace SGson.Interceptors
 			if (dimension < array.Rank)
 			{
 				JsonArray ja = (JsonArray)je;
-				for (int i = 0; i < ja.Length; i++)
+				int i = 0;
+				foreach (JsonElement element in ja)
 				{
 					indices.AddLast(i);
-					SetArrayRecurse(ja[i], array, dimension + 1, indices, elementType);
+					SetArrayRecurse(element, array, dimension + 1, indices, elementType);
 					indices.RemoveLast();
+					i++;
 				}
 			}
 			else
@@ -92,9 +101,9 @@ namespace SGson.Interceptors
 				JsonArray ja = (JsonArray)je;
 				if (lengths[dimension] == null)
 				{
-					lengths[dimension] = ja.Length;
+					lengths[dimension] = ja.Count();
 				}
-				else if (lengths[dimension] != ja.Length)
+				else if (lengths[dimension] != ja.Count())
 				{
 					throw new Exception("Expect an array of length " + lengths[dimension] + ", but " + je.ToString());
 				}

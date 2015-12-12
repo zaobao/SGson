@@ -158,15 +158,18 @@ namespace SGson.IO
 		public void Write(JsonArray jsonArray)
 		{
 			writer.Write('[');
-			int length = jsonArray.Length;
-			if (length > 0)
+			bool first = true;
+			foreach (JsonElement je in jsonArray)
 			{
-				this.Write(jsonArray[0]);
-				for (int i = 1; i < length; i++)
+				if (!first)
 				{
 					writer.Write(',');
-					this.Write(jsonArray[i]);
 				}
+				else
+				{
+					first = false;
+				}
+				this.Write(je);
 			}
 			writer.Write(']');
 		}

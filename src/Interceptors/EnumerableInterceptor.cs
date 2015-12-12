@@ -24,12 +24,16 @@ namespace SGson.Interceptors
 
 		public override JsonElement InterceptWhenSerialize(object o)
 		{
-			JsonArray ja = new JsonArray();
+			JsonArray ja = new JsonArray(GetJsonElementWithYield(o));
+			return ja;
+		}
+
+		private IEnumerable<JsonElement> GetJsonElementWithYield(object o)
+		{
 			foreach (object item in (IEnumerable)o)
 			{
-				ja.Add(Context.ToJsonTree(item));
+				yield return Context.ToJsonTree(item);
 			}
-			return ja;
 		}
 
 		public override object InterceptWhenDeserialize(JsonElement je, Type type)
