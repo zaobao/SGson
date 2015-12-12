@@ -36,7 +36,7 @@ namespace SGson.Interceptors
 				JsonArray ja = new JsonArray(GetJsonElementRecurseWithYield(array, dimension, indices));
 				return ja;
 			}
-			return Context.ToJsonTree(array.GetValue(indices.ToArray()));
+			return Context.ToJsonTree(array.GetValue(indices));
 		}
 
 		private IEnumerable<JsonElement> GetJsonElementRecurseWithYield(Array array, int dimension, long[] indices)
