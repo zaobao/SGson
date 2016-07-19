@@ -503,6 +503,8 @@ namespace SGson.IO
 					return '"';
 				case '\\':
 					return '\\';
+				case '/':
+					return '/';
 				default:
 					throw CreateJsonParseException(String.Format("Unexpected char '{0}' at the beginning of a escaped char.", (char)c));
 			}
