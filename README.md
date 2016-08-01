@@ -24,6 +24,33 @@ SGson类的对象中的方法不是线程安全的，如果在多线程环境下
 
 SGson将C#中字符串和所有数字类型序列化为JSON的string和number，但不包括char类型，char类型留给用户可以自己决定将它序列化为字符串还是数字。
 
+#### 字符串
+##### 反序列化
+字符串反序列化支持Json官方定义的格式
+```
+string
+    ""
+    " chars "
+chars
+    char
+    char chars
+char
+    any-Unicode-character-
+        except-"-or-\-or-
+        control-character
+    \"
+    \\
+    \/
+    \b
+    \f
+    \n
+    \r
+    \t
+    \u four-hex-digits 
+```
+##### 字符串序列化格式
+字符串序列化按照上面官方规则序列化，规则应用优先级自上而下递减。即正斜杠被序列化为"/"而不是"\/"；能使用"\\\*"表示的控制字符不会被序列化为"\u****"，比如换行符被序列化为"\n"，而不是"\u000A"。
+
 #### 数字类型扩展
 
 除了JSON标准中的double类型以外，还支持JavaScript中16进制和8进制表示形式，并支持ECMAScript6中2进制和新的8进制表示方式。
