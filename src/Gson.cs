@@ -14,7 +14,7 @@ namespace SGson
 {
 	public class Gson
 	{
-		public const string Version = "0.9.1.2";
+		public const string Version = "0.9.2";
 
 		internal static Dictionary<Type, Func<object, JsonElement>> DefaultSerializerDictionary = new Dictionary<Type, Func<object, JsonElement>>()
 		{

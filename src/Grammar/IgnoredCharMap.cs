@@ -31,9 +31,13 @@ namespace SGson.Grammar
 		{
 			get
 			{
-				if (index < 32 && index > -1)
+				if (index >= 0 && index < 32)
 				{
 					return ascii_class[index];
+				}
+				if (index >= 128 && index < 160)
+				{
+					return IgnoredCharType.Ignored;
 				}
 				if (index <= 0xFFFF)
 				{
