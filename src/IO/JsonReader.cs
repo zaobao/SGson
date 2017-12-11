@@ -143,7 +143,7 @@ namespace SGson.IO
 				{
 					throw CreateJsonParseException("Unstarted map, '{' is expected.");
 				}
-				throw CreateJsonParseException(String.Format("Unexpected char '{0}' at the beginning of the map.", c));
+				throw CreateJsonParseException(String.Format("Unexpected char '{0}' at the beginning of the map.", (char)c));
 			}
 			JsonMap jm = new JsonMap();
 			c = PeekSkipWhite();
@@ -322,7 +322,6 @@ namespace SGson.IO
 				else if (NumberCharType.IsDigit(c))
 				{
 					radix = 8;
-					chars.Add('0');
 					while (NumberCharType.IsDigit(c = Peek()))
 					{
 						chars.Add((char)c);
@@ -483,7 +482,7 @@ namespace SGson.IO
 						}
 						else
 						{
-							throw CreateJsonParseException(String.Format("Unexpected char '{0}' in a unicode escaped char."), null, i - 3);
+							throw CreateJsonParseException(String.Format("Unexpected char '{0}' in a unicode escaped char.", (char)c), null, i - 3);
 						}
 					}
 					return (char)number;
