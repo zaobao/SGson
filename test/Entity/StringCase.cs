@@ -8,6 +8,7 @@ namespace SGson.Test.Entity
 		public string StringNull { get; set; }
 		public string StringEmpty { get; set; }
 		public string StringCommon { get; set; }
+		public string StringFromNumber { get; set; }
 		public String SysStringUndifined { get; set; }
 		public String SysStringNull { get; set; }
 		public String SysStringEmpty { get; set; }

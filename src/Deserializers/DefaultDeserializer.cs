@@ -159,6 +159,10 @@ namespace SGson.Deserializers
 			{
 				return (string)(JsonString)x;
 			}
+			else if (x.IsJsonNumber)
+			{
+				return (string)(JsonNumber)x;
+			}
 			throw new Exception(String.Format("Type not match, can not convert {0} to string, JsonElement: {1}.", x.GetType(), x.ToString()));
 		}
 		public static object DeserializeDateTime(JsonElement x)

@@ -14,7 +14,7 @@ using SGson;
 
 [assembly: AssemblyCompany ("")]
 [assembly: AssemblyProduct ("SGson")]
-[assembly: AssemblyCopyright ("Copyright © Zaobao 2015")]
+[assembly: AssemblyCopyright ("Copyright © Zaobao 2018")]
 [assembly: AssemblyVersion (Gson.Version)]
 [assembly: SatelliteContractVersion (Gson.Version)]
 [assembly: AssemblyInformationalVersion (Gson.Version)]

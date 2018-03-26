@@ -17,6 +17,7 @@
 		'StringNull': null,
 		"StringEmpty": "",
 		StringCommon: "I'm a common string.",
+		StringFromNumber: 12321312,
 		SysStringNull: Null,
 		SysStringEmpty: '',
 		SysStringCommon: 'An instance of System.String.',
